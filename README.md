@@ -7,12 +7,13 @@ Template de site vitrine one-page, prêt à personnaliser, pour entrepreneurs in
 - **Site vitrine one-page** : hero, services (3 offres), à propos, méthodologie en 4 étapes, ressources téléchargeables, formulaire de contact — le tout en une seule page avec navigation par ancre.
 - **Mode sombre / clair** avec mémorisation du choix (localStorage).
 - **Responsive** : navigation burger sur mobile, grilles adaptatives, breakpoints jusqu'à 480px.
-- **Pages de téléchargement de ressources (lead magnet)** : deux pages dédiées (`pages/`) avec formulaire prénom/email/entreprise, qui enregistrent le lead dans Firebase Firestore et déclenchent automatiquement un email de confirmation (au visiteur) et de notification (à vous) via l'extension Firebase **Trigger Email**. Fonctionnel dès que vous branchez votre propre projet Firebase (voir [INSTALLATION.md](./INSTALLATION.md)).
+- **Formulaire de contact fonctionnel** : les demandes envoyées depuis la page d'accueil (`#contact-form`) sont enregistrées dans Firebase Firestore et déclenchent automatiquement un email de confirmation (au visiteur) et de notification (à vous) via l'extension Firebase **Trigger Email**.
+- **Pages de téléchargement de ressources (lead magnet)** : deux pages dédiées (`pages/`) avec formulaire prénom/email/entreprise, branchées sur le même circuit Firestore + Trigger Email que le formulaire de contact.
 - **Pages légales RGPD incluses** : `mentions-legales.html` et `politique-confidentialite.html`, avec toute la structure juridique (RGPD, cookies, droits des utilisateurs, CNIL) déjà rédigée — il ne reste qu'à compléter vos informations d'entreprise (placeholders `[ENTRE_CROCHETS]`).
 - **Palette de couleurs centralisée** : deux couleurs (primaire + secondaire) définies en variables CSS en haut de `assets/css/main.css`. Modifier ces quelques lignes suffit à rebrander l'intégralité du site (boutons, liens, icônes, dégradés, mode sombre inclus).
 - **Icônes** via [Lucide](https://lucide.dev/) (chargées en CDN, aucune installation requise).
 
-> ℹ️ Le formulaire de contact de la page d'accueil (`#contact-form`) est aujourd'hui une simulation côté navigateur (pas d'envoi réel). Seuls les formulaires de téléchargement de ressource sont branchés sur Firebase par défaut. Voir [INSTALLATION.md](./INSTALLATION.md#aller-plus-loin-brancher-le-formulaire-de-contact) pour l'activer aussi sur le formulaire de contact.
+> ℹ️ Les trois formulaires (contact + 2 téléchargements de ressource) sont tous branchés sur Firebase, mais n'enverront rien tant que vous n'avez pas configuré votre propre projet Firebase — voir [INSTALLATION.md](./INSTALLATION.md).
 
 ## Stack technique
 

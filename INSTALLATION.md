@@ -2,9 +2,8 @@
 
 Ce guide explique comment configurer ce template pour votre propre activité : créer votre projet Firebase, brancher vos propres clés, activer l'envoi d'emails automatique et déployer le site.
 
-> **Important — ce qui est déjà fonctionnel vs. ce qu'il faut configurer**
-> - Les **deux formulaires de téléchargement de ressource** (`pages/checklist-ia-pme.html` et `pages/guide-prompts-ia.html`) enregistrent le lead dans Firebase Firestore et déclenchent automatiquement un email (au visiteur + à vous) via l'extension **Trigger Email**. C'est le circuit décrit dans ce guide.
-> - Le **formulaire de contact de la page d'accueil** (`#contact-form`) est aujourd'hui une simulation côté navigateur uniquement (message de succès affiché, mais aucune donnée n'est envoyée nulle part). Si vous voulez recevoir ces demandes, adaptez-le sur le même modèle que les formulaires de ressource (voir [Aller plus loin](#aller-plus-loin-brancher-le-formulaire-de-contact)), ou branchez-le sur un service tiers (Formspree, EmailJS, etc.).
+> **Les 3 formulaires du site sont déjà câblés sur le même circuit**
+> Le formulaire de contact de la page d'accueil (`#contact-form`) et les deux formulaires de téléchargement de ressource (`pages/checklist-ia-pme.html`, `pages/guide-prompts-ia.html`) enregistrent chacun un document dans Firebase Firestore et déclenchent automatiquement un email (au visiteur + une notification à vous) via l'extension **Trigger Email**. Tant que vous n'avez pas suivi les étapes ci-dessous avec votre propre projet Firebase, aucun des trois n'enverra réellement d'email.
 
 ---
 
@@ -13,7 +12,7 @@ Ce guide explique comment configurer ce template pour votre propre activité : c
 1. [Prérequis](#1-prérequis)
 2. [Créer son propre projet Firebase](#2-créer-son-propre-projet-firebase)
 3. [Configurer les clés Firebase dans le projet](#3-configurer-les-clés-firebase-dans-le-projet)
-4. [Configurer l'envoi d'emails (formulaires de ressource / lead magnet)](#4-configurer-lenvoi-demails-formulaires-de-ressource--lead-magnet)
+4. [Configurer l'envoi d'emails](#4-configurer-lenvoi-demails)
 5. [Configurer les règles Firestore](#5-configurer-les-règles-firestore)
 6. [Déployer avec firebase deploy](#6-déployer-avec-firebase-deploy)
 7. [Dépannage](#7-dépannage)
@@ -75,11 +74,11 @@ Remplacez chaque valeur `[ENTRE_CROCHETS]` par celle de votre `firebaseConfig` (
 
 ---
 
-## 4. Configurer l'envoi d'emails (formulaires de ressource / lead magnet)
+## 4. Configurer l'envoi d'emails
 
 ### Méthode utilisée par le template : extension Firebase "Trigger Email"
 
-À chaque téléchargement de ressource, le site crée un document dans la collection Firestore `mail`. L'extension **Trigger Email** surveille cette collection et envoie automatiquement l'email correspondant (au visiteur ET une notification à vous).
+À chaque soumission (formulaire de contact ou téléchargement de ressource), le site crée un document dans la collection Firestore `mail`. L'extension **Trigger Email** surveille cette collection et envoie automatiquement l'email correspondant (au visiteur ET une notification à vous). Les trois formulaires du site utilisent exactement le même circuit.
 
 1. **Installer l'extension**
    - Dans la console Firebase, allez dans **"Extensions"** > **"Parcourir le catalogue"**.
@@ -101,7 +100,7 @@ Remplacez chaque valeur `[ENTRE_CROCHETS]` par celle de votre `firebaseConfig` (
    > Le contenu de l'email (sujet, texte, HTML) est déjà généré directement par le code JavaScript (`assets/js/main.js`) au moment de la création du document — vous n'avez rien d'autre à configurer côté template pour le contenu de l'email. Pensez à remplacer les placeholders `[NOM_ENTREPRISE]`, `[EMAIL_CONTACT]`, `[VOTRE_TAGLINE]` et `[NOM_DE_DOMAINE]` dans ce fichier (voir section 3 et le README).
 
 3. **Vérifier l'adresse de notification**
-   - Dans `assets/js/main.js`, la section qui crée l'email de notification utilise `to: ['[EMAIL_CONTACT]']` : remplacez `[EMAIL_CONTACT]` par votre adresse email réelle.
+   - Dans `assets/js/main.js`, les documents de notification utilisent `to: ['[EMAIL_CONTACT]']` (dans la section `CONTACT FORM` et dans la section `RESOURCE DOWNLOAD FORMS`) : remplacez chaque occurrence de `[EMAIL_CONTACT]` par votre adresse email réelle.
 
 ### Alternative : EmailJS
 
@@ -109,15 +108,11 @@ Si vous préférez ne pas utiliser Firestore + l'extension Trigger Email, [Email
 
 1. Créez un compte sur https://www.emailjs.com/.
 2. Dans **"Email Services"**, ajoutez un service (Gmail, Outlook...) et connectez votre compte. Notez le **Service ID**.
-3. Dans **"Email Templates"**, créez un template avec les variables `{{resource}}`, `{{prenom}}`, `{{email}}`, `{{entreprise}}`, `{{date}}`. Notez le **Template ID**.
+3. Dans **"Email Templates"**, créez un template avec les variables dont vous avez besoin (ex. `{{name}}`, `{{email}}`, `{{message}}` pour le contact ; `{{resource}}`, `{{prenom}}`, `{{email}}`, `{{entreprise}}`, `{{date}}` pour les ressources). Notez le **Template ID**.
 4. Dans **"Account" > "General"**, copiez votre **Public Key**.
-5. Installez le SDK EmailJS et remplacez la logique `saveToFirestore()` de `assets/js/main.js` par un appel `emailjs.send(serviceId, templateId, templateParams, publicKey)`.
+5. Installez le SDK EmailJS et remplacez les appels à `sendViaFirestoreMail(...)` / `saveToFirestore()` dans `assets/js/main.js` par un appel `emailjs.send(serviceId, templateId, templateParams, publicKey)`.
 
 D'autres alternatives sans backend existent également : [Formspree](https://formspree.io/) (gratuit jusqu'à 50 soumissions/mois) ou un webhook Zapier/Make.
-
-### Aller plus loin : brancher le formulaire de contact
-
-Le formulaire de contact de la page d'accueil (`#contact-form`) n'envoie actuellement aucune donnée (voir l'encart en haut de ce guide). Pour le rendre fonctionnel, dupliquez la logique déjà utilisée pour les formulaires de ressource (`resourceForm.addEventListener('submit', ...)` dans `assets/js/main.js`) : récupérez les champs du formulaire, créez un document dans la collection `mail` avec les champs `to`, `message.subject`, `message.text`, `message.html`, et laissez l'extension Trigger Email s'occuper de l'envoi.
 
 ---
 
@@ -183,7 +178,7 @@ puis ouvrez http://localhost:8000.
 - Vérifiez que le document a bien été créé dans la collection `mail` (Firestore Database > Data).
 
 **Erreur "Firebase SDK non chargé"**
-- Vérifiez que les balises `<script>` du SDK Firebase sont bien présentes dans le `<head>` de la page HTML concernée (elles sont déjà incluses dans `pages/checklist-ia-pme.html` et `pages/guide-prompts-ia.html`).
+- Vérifiez que les balises `<script>` du SDK Firebase sont bien présentes dans le `<head>` de la page HTML concernée (elles sont déjà incluses dans `index.html`, `pages/checklist-ia-pme.html` et `pages/guide-prompts-ia.html`).
 
 **Tester une écriture Firestore manuellement**
 

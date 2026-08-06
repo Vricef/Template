@@ -5,21 +5,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Lucide icons
     lucide.createIcons();
-    
+
     // Elements
     const header = document.getElementById('header');
     const burger = document.getElementById('burger');
     const nav = document.getElementById('nav');
     const navLinks = document.querySelectorAll('.nav-link');
     const contactForm = document.getElementById('contact-form');
+    const resourceForm = document.getElementById('resource-form');
     const themeToggle = document.getElementById('theme-toggle');
-    
+
     // ========================================
     // DARK MODE
     // ========================================
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
+
     themeToggle.addEventListener('click', function() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('theme', newTheme);
         lucide.createIcons();
     });
-    
+
     // ========================================
     // HEADER SCROLL EFFECT
     // ========================================
@@ -37,11 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             header.classList.remove('scrolled');
         }
-        
+
         // Update active nav link based on scroll position
         updateActiveNavLink();
     });
-    
+
     // ========================================
     // MOBILE MENU
     // ========================================
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nav.classList.toggle('active');
         document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
     });
-    
+
     // Close mobile menu on link click
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = '';
         });
     });
-    
+
     // ========================================
     // SMOOTH SCROLL
     // ========================================
@@ -77,19 +78,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // ========================================
     // ACTIVE NAV LINK
     // ========================================
     function updateActiveNavLink() {
         const sections = document.querySelectorAll('section[id]');
         const scrollPosition = window.scrollY + header.offsetHeight + 100;
-        
+
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.offsetHeight;
             const sectionId = section.getAttribute('id');
-            
+
             if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                 navLinks.forEach(link => {
                     link.classList.remove('active');
@@ -100,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // ========================================
     // SCROLL ANIMATIONS
     // ========================================
@@ -108,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -117,55 +118,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, observerOptions);
-    
+
     // Observe elements
     document.querySelectorAll('.service-card, .process-step, .about-content > *').forEach(el => {
         el.style.opacity = '0';
         observer.observe(el);
     });
-    
+
     // ========================================
-    // CONTACT FORM
+    // FIREBASE INIT
+    // Utilisé à la fois par le formulaire de contact et par les
+    // formulaires de téléchargement de ressource ci-dessous.
     // ========================================
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            
-            // Loading state
-            submitBtn.textContent = 'Envoi en cours...';
-            submitBtn.disabled = true;
-            
-            // Simulate form submission (replace with actual backend)
-            setTimeout(() => {
-                // Success state
-                submitBtn.textContent = '✓ Message envoyé !';
-                submitBtn.style.background = 'var(--color-success)';
-                
-                // Reset form
-                contactForm.reset();
-                
-                // Reset button after delay
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.style.background = '';
-                    submitBtn.disabled = false;
-                }, 3000);
-            }, 1500);
-        });
-    }
-    
-    // ========================================
-    // RESOURCE DOWNLOAD FORMS
-    // ========================================
-    const resourceForm = document.getElementById('resource-form');
-    if (resourceForm) {
-        const resourceType = resourceForm.getAttribute('data-resource');
-        const successMessage = document.getElementById('success-message');
-        
-        // Firebase Configuration
+    if (contactForm || resourceForm) {
         // Remplacez ces valeurs par la configuration de VOTRE projet Firebase
         // (Console Firebase > Paramètres du projet > Vos applications > Config)
         // Voir INSTALLATION.md pour la marche à suivre complète.
@@ -178,8 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             appId: "[FIREBASE_APP_ID]",
             measurementId: "[FIREBASE_MEASUREMENT_ID]"
         };
-        
-        // Initialize Firebase
+
         if (typeof firebase !== 'undefined') {
             if (!firebase.apps.length) {
                 firebase.initializeApp(FIREBASE_CONFIG);
@@ -190,34 +154,311 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             console.error('❌ Firebase SDK non chargé ! Vérifiez que les scripts sont présents dans les pages HTML.');
         }
-        
+    }
+
+    // Crée un document dans la collection Firestore 'mail'.
+    // L'extension Firebase "Trigger Email" (voir INSTALLATION.md) surveille
+    // cette collection et envoie l'email correspondant automatiquement.
+    async function sendViaFirestoreMail(mailDoc, fallbackData) {
+        if (typeof firebase === 'undefined') {
+            console.warn('Firebase non chargé. Les données ne seront pas enregistrées.');
+            console.log('Données du formulaire :', fallbackData);
+            return false;
+        }
+
+        try {
+            const db = firebase.firestore();
+            await db.collection('mail').add({
+                ...mailDoc,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de la création du document d\'email dans Firestore :', error);
+            console.log('Données du formulaire :', fallbackData);
+            return false;
+        }
+    }
+
+    // ========================================
+    // CONTACT FORM
+    // ========================================
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const phone = formData.get('phone') || 'Non renseigné';
+            const typeSelect = contactForm.querySelector('select[name="type"]');
+            const typeLabel = typeSelect.options[typeSelect.selectedIndex].textContent;
+            const message = formData.get('message');
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+
+            // Loading state
+            submitBtn.textContent = 'Envoi en cours...';
+            submitBtn.disabled = true;
+
+            const formattedDate = new Date().toLocaleString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // --- Email de confirmation envoyé au visiteur ---
+            const confirmationSubject = `Votre demande a bien été reçue - [NOM_ENTREPRISE]`;
+            const confirmationText = `
+Bonjour ${name},
+
+Merci pour votre message ! Voici un récapitulatif de votre demande :
+- Type de demande : ${typeLabel}
+- Message : ${message}
+- Date : ${formattedDate}
+
+Je reviens vers vous rapidement.
+
+À très bientôt,
+[VOTRE_NOM]
+[NOM_ENTREPRISE]
+            `.trim();
+
+            const confirmationHtml = `
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>${confirmationSubject}</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#0A1628;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#0A1628;padding:24px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;">
+            <tr>
+              <td style="padding:24px 32px;background:linear-gradient(135deg,#0A1628,#111D2E);color:#ffffff;">
+                <table width="100%%" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="left" style="font-size:20px;font-weight:700;">
+                      [NOM_ENTREPRISE]
+                    </td>
+                    <td align="right" style="font-size:12px;color:#CBD5E0;">
+                      ${formattedDate}
+                    </td>
+                  </tr>
+                </table>
+                <h1 style="margin:16px 0 0 0;font-size:24px;font-weight:700;color:#F7FAFC;">
+                  Votre message a bien été reçu
+                </h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:24px 32px 16px 32px;color:#2D3748;">
+                <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
+                  Bonjour ${name},
+                </p>
+                <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
+                  Merci pour votre message, je reviens vers vous rapidement. Voici un récapitulatif de votre demande :
+                </p>
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%%" style="margin:0 0 16px 0;">
+                  <tr>
+                    <td style="padding:8px 0;font-size:14px;color:#718096;width:140px;">Type de demande</td>
+                    <td style="padding:8px 0;font-size:14px;color:#2D3748;">${typeLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 0;font-size:14px;color:#718096;">Téléphone</td>
+                    <td style="padding:8px 0;font-size:14px;color:#2D3748;">${phone}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 0;font-size:14px;color:#718096;">Message</td>
+                    <td style="padding:8px 0;font-size:14px;color:#2D3748;">${message}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 0;font-size:14px;color:#718096;">Date</td>
+                    <td style="padding:8px 0;font-size:14px;color:#2D3748;">${formattedDate}</td>
+                  </tr>
+                </table>
+                <p style="margin:0 0 8px 0;font-size:13px;color:#A0AEC0;line-height:1.6;">
+                  Cet email vous a été envoyé suite à votre demande sur [NOM_DE_DOMAINE]. Vos données ne sont jamais revendues et sont utilisées uniquement pour vous recontacter dans le cadre de votre demande.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 32px 24px 32px;background-color:#F7FAFC;color:#718096;font-size:12px;text-align:center;">
+                © ${new Date().getFullYear()} [NOM_ENTREPRISE] — [VOTRE_TAGLINE]
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+            `.trim();
+
+            // --- Email de notification envoyé au propriétaire du site ---
+            const notificationSubject = `📩 Nouvelle demande de contact - ${typeLabel}`;
+            const notificationText = `
+Nouvelle demande de contact !
+
+Nom : ${name}
+Email : ${email}
+Téléphone : ${phone}
+Type de demande : ${typeLabel}
+Message : ${message}
+Date : ${formattedDate}
+            `.trim();
+
+            const notificationHtml = `
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>${notificationSubject}</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#F7FAFC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F7FAFC;padding:24px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+            <tr>
+              <td style="padding:32px;background:linear-gradient(135deg,#FF6B35,#FF8C61);color:#ffffff;">
+                <h1 style="margin:0;font-size:24px;font-weight:700;color:#ffffff;">
+                  📩 Nouvelle demande de contact
+                </h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:24px;">
+                  <tr>
+                    <td style="padding:16px;background-color:#F7FAFC;border-radius:8px;border-left:4px solid #FF6B35;">
+                      <p style="margin:0 0 8px 0;font-size:14px;color:#718096;font-weight:600;text-transform:uppercase;">Type de demande</p>
+                      <p style="margin:0;font-size:18px;color:#2D3748;font-weight:600;">${typeLabel}</p>
+                    </td>
+                  </tr>
+                </table>
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:24px;">
+                  <tr>
+                    <td style="padding:12px 0;border-bottom:1px solid #E2E8F0;">
+                      <p style="margin:0;font-size:14px;color:#718096;">Nom</p>
+                      <p style="margin:4px 0 0 0;font-size:16px;color:#2D3748;font-weight:500;">${name}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 0;border-bottom:1px solid #E2E8F0;">
+                      <p style="margin:0;font-size:14px;color:#718096;">Email</p>
+                      <p style="margin:4px 0 0 0;font-size:16px;color:#2D3748;font-weight:500;">
+                        <a href="mailto:${email}" style="color:#FF6B35;text-decoration:none;">${email}</a>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 0;border-bottom:1px solid #E2E8F0;">
+                      <p style="margin:0;font-size:14px;color:#718096;">Téléphone</p>
+                      <p style="margin:4px 0 0 0;font-size:16px;color:#2D3748;font-weight:500;">${phone}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 0;">
+                      <p style="margin:0;font-size:14px;color:#718096;">Message</p>
+                      <p style="margin:4px 0 0 0;font-size:16px;color:#2D3748;font-weight:500;">${message}</p>
+                    </td>
+                  </tr>
+                </table>
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding:24px 0 0 0;">
+                      <a href="mailto:${email}?subject=Re: ${typeLabel}" style="display:inline-block;padding:14px 32px;background-color:#FF6B35;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;font-size:16px;">
+                        📧 Répondre à cette personne
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+            `.trim();
+
+            const fallbackData = { name, email, phone, type: typeLabel, message, date: formattedDate };
+
+            (async () => {
+                try {
+                    // 1. Email de confirmation au visiteur
+                    await sendViaFirestoreMail({
+                        to: [email],
+                        message: { subject: confirmationSubject, text: confirmationText, html: confirmationHtml },
+                        data: fallbackData
+                    }, fallbackData);
+
+                    // 2. Email de notification au propriétaire du site
+                    await sendViaFirestoreMail({
+                        to: ['[EMAIL_CONTACT]'],
+                        message: { subject: notificationSubject, text: notificationText, html: notificationHtml },
+                        data: { ...fallbackData, type_: 'notification' }
+                    }, fallbackData);
+
+                    // Success state
+                    submitBtn.textContent = '✓ Message envoyé !';
+                    submitBtn.style.background = 'var(--color-success)';
+                    contactForm.reset();
+                } catch (error) {
+                    console.error('Erreur lors de l\'envoi du formulaire de contact :', error);
+                    alert('Une erreur est survenue lors de l\'envoi de votre message. Merci de réessayer ou de nous contacter directement par email.');
+                } finally {
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.style.background = '';
+                        submitBtn.disabled = false;
+                    }, 3000);
+                }
+            })();
+        });
+    }
+
+    // ========================================
+    // RESOURCE DOWNLOAD FORMS
+    // ========================================
+    if (resourceForm) {
+        const resourceType = resourceForm.getAttribute('data-resource');
+        const successMessage = document.getElementById('success-message');
+
         resourceForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(resourceForm);
             const prenom = formData.get('prenom');
             const email = formData.get('email');
             const entreprise = formData.get('entreprise');
-            
+
             // Validate form
             if (!prenom || !email || !entreprise) {
                 alert('Veuillez remplir tous les champs obligatoires.');
                 return;
             }
-            
+
             if (!resourceForm.querySelector('input[name="rgpd"]').checked) {
                 alert('Veuillez accepter les conditions d\'utilisation des données.');
                 return;
             }
-            
+
             const submitBtn = resourceForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            
+
             // Loading state
             submitBtn.textContent = 'Traitement en cours...';
             submitBtn.disabled = true;
-            
+
             // Determine PDF path and resource name
             let pdfPath = '';
             let resourceName = '';
@@ -228,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 pdfPath = '../assets/Ressources/5-PROMPTS-IA-PRETS-A-LEMPLOI .pdf';
                 resourceName = 'Guide des Prompts IA';
             }
-            
+
             // Function to créer un document d'email dans Firestore
             // L'extension Trigger Email enverra ensuite l'email automatiquement
             const saveToFirestore = async () => {
@@ -243,7 +484,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     return false;
                 }
-                
+
                 try {
                     console.log('🔄 Tentative d\'enregistrement dans Firestore...');
                     const db = firebase.firestore();
@@ -516,13 +757,13 @@ Vous pouvez recontacter cette personne pour proposer vos services.
                     return false;
                 }
             };
-            
+
             // Process form submission
             (async () => {
                 try {
                     // Save to Firestore (Trigger Email extension will send email automatically)
                     await saveToFirestore();
-                    
+
                     // Trigger PDF download
                     if (pdfPath) {
                         // Encode URL to handle spaces in filenames
@@ -531,7 +772,7 @@ Vous pouvez recontacter cette personne pour proposer vos services.
                             if (part === '..' || index === 0) return part;
                             return encodeURIComponent(part);
                         }).join('/');
-                        
+
                         const link = document.createElement('a');
                         link.href = encodedPath;
                         // Clean filename for download (remove trailing spaces)
@@ -541,17 +782,17 @@ Vous pouvez recontacter cette personne pour proposer vos services.
                         link.click();
                         document.body.removeChild(link);
                     }
-                    
+
                     // Hide form and show success message
                     resourceForm.style.display = 'none';
                     if (successMessage) {
                         successMessage.style.display = 'block';
                     }
-                    
+
                 } catch (error) {
                     console.error('Erreur:', error);
                     alert('Une erreur est survenue. Le PDF sera téléchargé, mais l\'email n\'a peut-être pas été envoyé.');
-                    
+
                     // Still trigger PDF download even if email fails
                     if (pdfPath) {
                         const link = document.createElement('a');
@@ -561,7 +802,7 @@ Vous pouvez recontacter cette personne pour proposer vos services.
                         link.click();
                         document.body.removeChild(link);
                     }
-                    
+
                     resourceForm.style.display = 'none';
                     if (successMessage) {
                         successMessage.style.display = 'block';
@@ -577,4 +818,3 @@ Vous pouvez recontacter cette personne pour proposer vos services.
         });
     }
 });
-
