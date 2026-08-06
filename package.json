@@ -1,0 +1,7 @@
+{
+  "name": "site-vitrine-template",
+  "version": "1.0.0",
+  "dependencies": {
+    "firebase": "^12.7.0"
+  }
+}

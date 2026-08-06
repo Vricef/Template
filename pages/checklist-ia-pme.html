@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titre de la ressource 1 - [NOM_ENTREPRISE]</title>
+    <meta name="description" content="[DESCRIPTION_RESSOURCE_1] - décrivez ici le contenu de cette ressource téléchargeable.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../assets/images/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo">
+                <img src="../assets/images/logo.png" alt="[NOM_ENTREPRISE]">
+            </a>
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="../index.html#accueil" class="nav-link">Accueil</a></li>
+                    <li><a href="../index.html#services" class="nav-link">Services</a></li>
+                    <li><a href="../index.html#apropos" class="nav-link">À propos</a></li>
+                    <li><a href="../index.html#processus" class="nav-link">Méthodologie</a></li>
+                    <li><a href="../index.html#ressources" class="nav-link">Ressources</a></li>
+                    <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
+                <i data-lucide="moon" class="icon-moon"></i>
+                <i data-lucide="sun" class="icon-sun"></i>
+            </button>
+            <a href="../index.html#contact" class="btn btn-primary header-cta">Me contacter</a>
+            <button class="burger" id="burger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Resource Download Section -->
+        <section class="resource-download" style="padding: calc(80px + var(--space-3xl)) 0 var(--space-3xl);">
+            <div class="container">
+                <div class="resource-download-content">
+                    <div class="resource-download-visual">
+                        <img src="../assets/images/Portaits-pepiniere-3.jpg" alt="[VOTRE_NOM] - [VOTRE_METIER]" style="width: 100%; border-radius: 16px; box-shadow: var(--shadow-md);">
+                    </div>
+                    <div class="resource-download-form-wrapper">
+                        <div class="resource-header">
+                            <div class="resource-icon-large">
+                                <i data-lucide="file-check"></i>
+                            </div>
+                            <h1 class="resource-title-large">Titre de la ressource 1</h1>
+                            <p class="resource-subtitle">Description de la ressource : présentez le contenu du document et sa valeur pour le visiteur.</p>
+                        </div>
+
+                        <form class="resource-form" id="resource-form" data-resource="checklist-ia-pme">
+                            <div class="form-group">
+                                <label for="prenom">Prénom *</label>
+                                <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required minlength="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label for="entreprise">Entreprise *</label>
+                                <input type="text" id="entreprise" name="entreprise" placeholder="Nom de votre entreprise" required minlength="2">
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="rgpd" required>
+                                    <span>J'accepte que mes données soient utilisées pour me recontacter concernant cette ressource.</span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-large">Télécharger le PDF <i data-lucide="download"></i></button>
+                        </form>
+
+                        <div class="resource-success-message" id="success-message" style="display: none;">
+                            <div class="success-icon">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                            <h3>Téléchargement réussi !</h3>
+                            <p>Merci pour votre intérêt. Le téléchargement devrait démarrer automatiquement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <img src="../assets/images/logo.png" alt="[NOM_ENTREPRISE]" class="footer-logo">
+                <p>[VOTRE_TAGLINE]</p>
+            </div>
+            <div class="footer-nav">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="../index.html#accueil">Accueil</a></li>
+                    <li><a href="../index.html#services">Services</a></li>
+                    <li><a href="../index.html#apropos">À propos</a></li>
+                    <li><a href="../index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-legal">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="../mentions-legales.html">Mentions légales</a></li>
+                    <li><a href="../politique-confidentialite.html">Politique de confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>© [ANNEE] [NOM_ENTREPRISE]. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

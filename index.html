@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[NOM_ENTREPRISE] - [VOTRE_TAGLINE]</title>
+    <meta name="description" content="[DESCRIPTION_META] - Décrivez ici en une phrase votre activité et votre proposition de valeur pour les moteurs de recherche.">
+    <meta name="keywords" content="[MOT_CLE_1], [MOT_CLE_2], [MOT_CLE_3], [VOTRE_VILLE], [VOTRE_SECTEUR]">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="[NOM_ENTREPRISE] - [VOTRE_TAGLINE]">
+    <meta property="og:description" content="[DESCRIPTION_META]">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="#accueil" class="logo">
+                <img src="assets/images/logo.png" alt="[NOM_ENTREPRISE]">
+            </a>
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="#accueil" class="nav-link active">Accueil</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#apropos" class="nav-link">À propos</a></li>
+                    <li><a href="#processus" class="nav-link">Méthodologie</a></li>
+                    <li><a href="#ressources" class="nav-link">Ressources</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
+                <i data-lucide="moon" class="icon-moon"></i>
+                <i data-lucide="sun" class="icon-sun"></i>
+            </button>
+            <a href="#contact" class="btn btn-primary header-cta">Me contacter</a>
+            <button class="burger" id="burger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="accueil">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">[VOTRE_TITRE_PRINCIPAL] avec <span class="highlight">[NOM_ENTREPRISE]</span></h1>
+                    <p class="hero-subtitle">[VOTRE_TAGLINE]</p>
+                    <p class="hero-description">[VOTRE_DESCRIPTION_ACCROCHE] — présentez ici en 2-3 phrases qui vous êtes, ce que vous proposez et à qui s'adresse votre offre.</p>
+                    <div class="hero-ctas">
+                        <a href="#services" class="btn btn-primary">Découvrir mes services</a>
+                        <a href="#contact" class="btn btn-secondary">Discuter de votre projet</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-image-wrapper">
+                        <img src="assets/images/Portaits-pepiniere-4.jpg" alt="[VOTRE_NOM] - [VOTRE_METIER]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services" id="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Titre de section</h2>
+                    <p class="section-subtitle">[SOUS_TITRE_SECTION] — décrivez en une phrase l'ensemble de votre offre.</p>
+                </div>
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i data-lucide="graduation-cap"></i>
+                        </div>
+                        <h3 class="service-title">Titre du service 1</h3>
+                        <p class="service-description">Description de votre service : présentez ici l'offre, les bénéfices pour le client et ce qui vous différencie.</p>
+                        <ul class="service-features">
+                            <li>Bénéfice ou caractéristique 1</li>
+                            <li>Bénéfice ou caractéristique 2</li>
+                            <li>Bénéfice ou caractéristique 3</li>
+                            <li>Bénéfice ou caractéristique 4</li>
+                        </ul>
+                        <p class="service-formula">Formule : [DETAIL_TARIF_OU_FORMULE]</p>
+                        <a href="#contact" class="btn btn-tertiary">En savoir plus <i data-lucide="arrow-right"></i></a>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <h3 class="service-title">Titre du service 2</h3>
+                        <p class="service-description">Description de votre service : présentez ici l'offre, les bénéfices pour le client et ce qui vous différencie.</p>
+                        <ul class="service-features">
+                            <li>Bénéfice ou caractéristique 1</li>
+                            <li>Bénéfice ou caractéristique 2</li>
+                            <li>Bénéfice ou caractéristique 3</li>
+                            <li>Bénéfice ou caractéristique 4</li>
+                        </ul>
+                        <p class="service-formula">Formule : [DETAIL_TARIF_OU_FORMULE]</p>
+                        <a href="#contact" class="btn btn-tertiary">Demander un devis <i data-lucide="arrow-right"></i></a>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i data-lucide="bar-chart-3"></i>
+                        </div>
+                        <h3 class="service-title">Titre du service 3</h3>
+                        <p class="service-description">Description de votre service : présentez ici l'offre, les bénéfices pour le client et ce qui vous différencie.</p>
+                        <ul class="service-features">
+                            <li>Bénéfice ou caractéristique 1</li>
+                            <li>Bénéfice ou caractéristique 2</li>
+                            <li>Bénéfice ou caractéristique 3</li>
+                            <li>Bénéfice ou caractéristique 4</li>
+                        </ul>
+                        <p class="service-formula">Formule : [DETAIL_TARIF_OU_FORMULE]</p>
+                        <a href="#contact" class="btn btn-tertiary">Planifier un échange <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- À propos Section -->
+        <section class="about" id="apropos">
+            <div class="container about-content">
+                <div class="about-image">
+                    <img src="assets/images/Portraits-pepiniere-6.jpg" alt="[VOTRE_NOM] - [VOTRE_METIER]">
+                </div>
+                <div class="about-text">
+                    <h2 class="section-title">Titre de section</h2>
+                    <p>[DESCRIPTION_DE_VOTRE_ACTIVITE] — présentez votre parcours, votre expertise et ce qui vous passionne dans votre métier.</p>
+                    <p><strong>Votre mission ?</strong> [VOTRE_MISSION] — expliquez en une phrase la valeur que vous apportez à vos clients.</p>
+                    <p>[DESCRIPTION_COMPLEMENTAIRE] — détaillez ici votre approche et le type de clients que vous accompagnez.</p>
+                    <div class="about-pillars">
+                        <h4>Votre approche repose sur trois piliers :</h4>
+                        <ul>
+                            <li><i data-lucide="check"></i> Point fort 1</li>
+                            <li><i data-lucide="check"></i> Point fort 2</li>
+                            <li><i data-lucide="check"></i> Point fort 3</li>
+                        </ul>
+                    </div>
+                    <p class="about-location"><i data-lucide="map-pin"></i> Basé à [VOTRE_VILLE], intervention [ZONE_INTERVENTION]</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Processus Section -->
+        <section class="process" id="processus">
+            <div class="container">
+                <div class="section-header section-header-light">
+                    <h2 class="section-title">Titre de section</h2>
+                </div>
+                <div class="process-timeline">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i data-lucide="ear"></i></div>
+                        <h3>Étape 1</h3>
+                        <p>Description de l'étape : premier échange pour comprendre vos besoins, votre contexte et vos objectifs.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i data-lucide="file-text"></i></div>
+                        <h3>Étape 2</h3>
+                        <p>Description de l'étape : proposition d'un plan d'action ou d'une offre adaptée à votre besoin.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i data-lucide="rocket"></i></div>
+                        <h3>Étape 3</h3>
+                        <p>Description de l'étape : mise en œuvre concrète, avec un accompagnement adapté à votre rythme.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i data-lucide="trending-up"></i></div>
+                        <h3>Étape 4</h3>
+                        <p>Description de l'étape : livrables concrets et suivi post-mission pour assurer votre réussite.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ressources Section -->
+        <section class="resources" id="ressources">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Titre de section</h2>
+                    <p class="section-subtitle">[SOUS_TITRE_SECTION] — décrivez les ressources gratuites que vous proposez à vos visiteurs.</p>
+                </div>
+                <div class="resources-grid">
+                    <!-- Ressource 1 -->
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i data-lucide="file-check"></i>
+                        </div>
+                        <h3 class="resource-title">Titre de la ressource 1</h3>
+                        <p class="resource-description">Description de la ressource : présentez le contenu du document et sa valeur pour le visiteur.</p>
+                        <a href="pages/checklist-ia-pme.html" class="btn btn-primary">Télécharger le guide <i data-lucide="download"></i></a>
+                    </div>
+                    <!-- Ressource 2 -->
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i data-lucide="message-square-code"></i>
+                        </div>
+                        <h3 class="resource-title">Titre de la ressource 2</h3>
+                        <p class="resource-description">Description de la ressource : présentez le contenu du document et sa valeur pour le visiteur.</p>
+                        <a href="pages/guide-prompts-ia.html" class="btn btn-primary">Télécharger le guide <i data-lucide="download"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Titre de section</h2>
+                    <p class="section-subtitle">Discutons de votre projet et trouvons ensemble la meilleure solution pour vos besoins.</p>
+                </div>
+                <div class="contact-content">
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Nom complet *</label>
+                            <input type="text" id="name" name="name" placeholder="Votre nom et prénom" required minlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="06 XX XX XX XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type de demande *</label>
+                            <select id="type" name="type" required>
+                                <option value="">Sélectionnez une option</option>
+                                <option value="option-1">[TYPE_DE_DEMANDE_1]</option>
+                                <option value="option-2">[TYPE_DE_DEMANDE_2]</option>
+                                <option value="option-3">[TYPE_DE_DEMANDE_3]</option>
+                                <option value="autre">Autre demande</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="6" placeholder="Décrivez votre projet, vos besoins, vos objectifs..." required minlength="20"></textarea>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rgpd" required>
+                                <span>J'accepte que mes données soient utilisées pour me recontacter concernant ma demande.</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Envoyer ma demande</button>
+                    </form>
+                    <div class="contact-info">
+                        <div class="info-block">
+                            <h4>Coordonnées</h4>
+                            <p><i data-lucide="mail"></i> <a href="mailto:[EMAIL_CONTACT]">[EMAIL_CONTACT]</a></p>
+                            <p><i data-lucide="phone"></i> <a href="tel:[TELEPHONE]">[TELEPHONE]</a></p>
+                            <p><i data-lucide="map-pin"></i> Basé à [VOTRE_VILLE], intervention [ZONE_INTERVENTION]</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>Disponibilité</h4>
+                            <p><i data-lucide="clock"></i> Réponse sous [DELAI_REPONSE]</p>
+                            <p><i data-lucide="message-circle"></i> Premier échange gratuit et sans engagement</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>Réseaux</h4>
+                            <a href="[LIEN_LINKEDIN]" target="_blank" rel="noopener" class="social-link">
+                                <i data-lucide="linkedin"></i> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <img src="assets/images/logo.png" alt="[NOM_ENTREPRISE]" class="footer-logo">
+                <p>[VOTRE_TAGLINE]</p>
+            </div>
+            <div class="footer-nav">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#accueil">Accueil</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#apropos">À propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-legal">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="mentions-legales.html">Mentions légales</a></li>
+                    <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>© [ANNEE] [NOM_ENTREPRISE]. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
