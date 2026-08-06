@@ -72,6 +72,22 @@ body {
     line-height: 1.7;
     color: var(--color-gray-900);
     background-color: var(--bg-primary);
+    overflow-wrap: break-word;
+}
+
+/* Empêche les grilles ci-dessous de déborder horizontalement sur mobile :
+   par défaut, un item de grille ne peut pas rétrécir sous la taille de
+   son contenu (ex. un titre trop long). min-width: 0 lève cette limite. */
+.hero-content > *,
+.about-content > *,
+.contact-content > *,
+.contact-form > *,
+.footer-content > *,
+.resource-download-content > *,
+.services-grid > *,
+.resources-grid > *,
+.process-timeline > * {
+    min-width: 0;
 }
 
 img {
@@ -200,9 +216,20 @@ h4 {
     left: 0;
     right: 0;
     z-index: 1000;
+    transition: var(--transition);
+}
+
+/* Le flou est appliqué via ::before plutôt que directement sur .header :
+   backdrop-filter sur un ancêtre devient le "containing block" de tout
+   descendant en position:fixed (ici le menu mobile #nav.active), ce qui
+   le confinerait à la hauteur du header au lieu du plein écran. */
+.header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    transition: var(--transition);
 }
 
 .header.scrolled {
@@ -1011,7 +1038,7 @@ section {
     color: var(--color-secondary);
 }
 
-[data-theme="dark"] .header {
+[data-theme="dark"] .header::before {
     background: rgba(10, 22, 40, 0.95);
 }
 
