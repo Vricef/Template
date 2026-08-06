@@ -51,7 +51,16 @@ Changez ces valeurs (et leur équivalent dans le bloc `[data-theme="dark"]` un p
 
 ## Images à remplacer
 
-Voir le récapitulatif fourni séparément (logo et photos dans `assets/images/`) — ce sont les seuls éléments visuels que vous devez remplacer manuellement, aucune autre image n'est nécessaire.
+`assets/images/` contient des visuels placeholder auto-descriptifs (fond gris, texte indiquant quoi mettre) — remplacez chaque fichier par votre propre image **en gardant exactement le même nom** pour que rien ne casse dans le code :
+
+| Fichier | Contenu attendu | Format conseillé |
+|---|---|---|
+| `logo.png` | Votre logo | PNG, fond transparent |
+| `photo-hero.jpg` | Votre photo professionnelle (section d'accueil) | Portrait, ratio ~2:3 |
+| `photo-a-propos.jpg` | Photo de vous / de votre activité (section "à propos") | Paysage, ratio ~3:2 |
+| `photo-ressources.jpg` | Votre photo professionnelle (pages de téléchargement) | Portrait, ratio ~2:3 |
+
+Ce sont les seuls éléments visuels à remplacer manuellement, aucune autre image n'est nécessaire. Les deux PDF téléchargeables (`assets/Ressources/`) sont également à remplacer par vos propres contenus (voir la section [Structure du projet](#structure-du-projet)).
 
 ## Structure du projet
 
